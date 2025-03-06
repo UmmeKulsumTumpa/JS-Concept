@@ -14,7 +14,10 @@
 
 ### Types of Proxies:
 - **Forward Proxy**: Forwards requests from and to anywhere on the internet.
+<img src="images/forward-proxy.png" alt="forward-proxy" width="500" height="300">
+
 - **Reverse Proxy**: Takes requests from the internet and forwards them to the server through an internal network.
+<img src="images/reverse-proxy.png" alt="reverse-proxy" width="500" height="300">
 
 ### Proxy Computers
 - Proxy computers (modem, routers, etc.) that stand between the client and server are **hidden** to the **network** and **transport layer**.
@@ -45,37 +48,36 @@
 
 # 📝 Basic Aspects of HTTP
 
-### HTTP is Simple
+### 1. HTTP is Simple
 - Simple and human-readable.
 - **HTTP/2** encapsulates HTTP messages into **frames**.
 
-### HTTP is Extensible
+### 2. HTTP is Extensible
 - Can introduce new header functionality.
 - Need to learn more about **HEADERS**.
 
-### HTTP is Stateless, but Not Sessionless
+### 3. HTTP is Stateless, but Not Sessionless
 - **Stateless**: Two requests don’t need to be forwarded to the same server; any server having the requested document can respond.
 - **Stateful**: However, being stateless may create issues, such as when you want to interact with pages coherently (e.g., an e-commerce shopping basket).
   
   - The core of HTTP is stateless, but **HTTP cookies** allow the use of stateful sessions.
   - By using HTTP header extensibility, we can add the **session cookie** to the workflow. This allows session creation on the HTTP request to share the same context.
 
----
+### 4. HTTP and Connections
 
-# HTTP and Connections
-
-### Connection Control
+#### Connection Control
 - The connection is controlled by the **transport layer**.
 - HTTP requires a **reliable transport protocol** to ensure no messages are lost.
   - **TCP** (reliable)
   - **UDP** (unreliable)
 
-### HTTP's Reliance on TCP
+#### HTTP's Reliance on TCP
 - HTTP relies on **TCP standards**, and it is **connection-based**.
 - Before an HTTP exchange, the client and server need to establish a **TCP connection**, which requires several round trips.
 
-### HTTP Versions and Connection Efficiency:
+#### HTTP Versions and Connection Efficiency:
 - **HTTP/1.0**: Creates a new TCP connection for each request, which is less efficient.
 - **HTTP/1.1**: Introduced **pipelining** and **persistent connections**.
 - **HTTP/2**: Uses **multiplexed messages** over a single connection.
+
 
