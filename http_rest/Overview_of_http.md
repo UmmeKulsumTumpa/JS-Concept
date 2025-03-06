@@ -120,3 +120,77 @@
 
 <img src="images/all_types_of_http.png" alt="reverse-proxy">
 
+# Common Features Controllable with HTTP
+
+### 1. **Caching**
+- **Caching** allows HTTP to control how documents are stored and for how long.
+- The **server** can instruct the client or proxy servers to cache data.
+- The **client** can also tell proxies to ignore cached documents if necessary.
+
+### 2. **Relaxing the Origin Constraint**
+- By default, **web browsers** prevent websites from accessing information from other websites (for security reasons).
+- However, there are times when it's useful for different websites to share information (e.g., a webpage displaying content from multiple domains).
+- **HTTP headers** allow this strict rule to be relaxed, letting documents mix content from different websites.
+  - **Note**: Relaxing this constraint can raise **security concerns**, so it should be done carefully.
+
+### 3. **Authentication**
+- Some pages are **protected**, allowing only specific users to access them.
+- **Authentication** can be handled by HTTP using **WWW-Authenticate headers** or via **cookies** that track user sessions (e.g., login sessions).
+- These methods ensure that only authorized users can access certain pages.
+
+### 4. **Proxy and Tunneling**
+- **Proxies** act as intermediaries between the client and the server. They are commonly used to:
+  - Improve **performance** (e.g., caching).
+  - Enforce **security** (e.g., filtering).
+  - Hide the **user's IP address**.
+- **Tunneling** refers to the ability to send data through a proxy, bypassing certain restrictions (such as firewalls).
+  - It is commonly used with secure connections like **HTTPS**.
+
+### 5. **Sessions**
+- **HTTP** is a **stateless protocol**, meaning it doesn't remember past interactions.
+- **Sessions** are used to maintain state across different requests. 
+  - For example, when shopping on an e-commerce site, **cookies** store your shopping basket across multiple pages.
+- **Cookies** are used to track and store session information, so the server can "remember" who you are and what you've done previously.
+
+# HTTP Flow
+
+When a client wants to communicate with a server (either the final server or an intermediate proxy), it performs the following steps:
+
+### 1. Open a TCP Connection
+- The **TCP connection** is used to send a request (or several requests) and receive an answer.
+- The client may open a **new connection**, reuse an **existing connection**, or open **several TCP connections** to the servers.
+
+### 2. Send an HTTP Message
+- **HTTP messages** (before HTTP/2) are **human-readable**.
+- In **HTTP/2**, these simple messages are encapsulated in **frames**, making them impossible to read directly, but the basic principle remains the same.
+  
+Example of an HTTP request:
+```http
+GET / HTTP/1.1
+Host: developer.mozilla.org
+Accept-Language: fr
+```
+
+### 3. Read the Response Sent by the Server
+- The server sends a response back. An example of a response is as follows:
+```http
+HTTP/1.1 200 OK
+Date: Sat, 09 Oct 2010 14:28:02 GMT
+Server: Apache
+Last-Modified: Tue, 01 Dec 2009 20:18:22 GMT
+ETag: "51142bc1-7449-479b075b2891b"
+Accept-Ranges: bytes
+Content-Length: 29769
+Content-Type: text/html
+
+<!doctype html>...(here come the 29769 bytes of the requested web page)
+```
+
+### 4. Close or Reuse the Connection for Further Requests
+- After the request and response, the connection can either be closed or reused for additional requests.
+
+---
+
+### **HTTP Pipelining**
+- If **HTTP pipelining** is activated, several requests can be sent without waiting for the first response to be fully received.
+- However, HTTP pipelining has proven difficult to implement in older networks, where old software versions coexist with newer ones.
