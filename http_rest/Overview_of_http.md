@@ -13,10 +13,10 @@
 - Between **client** and **server**, there are entities called **proxies** that act as both client and server.
 
 ### Types of Proxies:
-- **Forward Proxy**: Forwards requests from and to anywhere on the internet.
+- **Forward Proxy**: Forwards requests from and to anywhere on the internet. also called as tunnel or gateways
 <img src="images/forward-proxy.png" alt="forward-proxy" width="500" height="300">
 
-- **Reverse Proxy**: Takes requests from the internet and forwards them to the server through an internal network.
+- **Reverse Proxy**: Takes requests from the internet and forwards them to the server through an internal network. (used to control and protect access to a server for load balancing, authetication, decryption or caching)
 <img src="images/reverse-proxy.png" alt="reverse-proxy" width="500" height="300">
 
 ### Proxy Computers
@@ -80,4 +80,43 @@
 - **HTTP/1.1**: Introduced **pipelining** and **persistent connections**.
 - **HTTP/2**: Uses **multiplexed messages** over a single connection.
 
+
+# HTTP Versions and Their Evolution
+
+### **HTTP/1.0** 
+- **Message Queue Type**: Requests are added in a queue.
+- If one request closes, the other can proceed.
+
+<img src="images/http1.0.png" alt="reverse-proxy" width="500" height="300">
+
+### **HTTP/1.1**
+- **Pipelining**: Allows multiple requests to be sent in a single connection without waiting for each request to finish.
+- However, a new problem may arise: **HOL (Head of Line) Blocking**.
+  - **HOL Blocking** occurs when the number of parallel requests in the browser exceeds the limit. In this case, other requests need to wait for the former request to finish.
+
+> Persistent Connection
+
+#### 1. **Non-Pipelined Persistent Connection**
+- In a **Non-pipelined connection**, the process is as follows:
+  - First, we establish the connection, which takes **2 RTTs**.
+  - Then, we send all the objects (such as images/text files), each of which takes **1 RTT**.
+  - No **TCP connection** is required for each object(that is 3 way handshake)
+
+#### 2. **Pipelined Persistent Connection**
+- In a **Pipelined connection**, the process is as follows:
+  - **2 RTTs** are required for connection establishment.
+  - Then, only **1 RTT** (assuming no window limit) is needed for all the objects (i.e., images/text files) to be sent.
+
+<img src="images/persistent_http.png" alt="reverse-proxy" width="500" height="300">
+
+> so in short if we use pipeline, we need only TCP connection once then send all the object at a time. but without pipeline, we make TCP connection once, but we then send each object seperately.
+
+### **HTTP/2.0**
+- **Multiplexing**: Allows multiple requests and responses to be sent concurrently over a single connection, which eliminates HOL blocking at the **application layer**.
+- However, **HOL blocking still exists** in the **Transport Layer** (TCP + TLS – Transport Layer Security).
+
+### **HTTP/3**
+- **UDP + QUIC** (didn’t go deep).
+
+<img src="images/all_types_of_http.png" alt="reverse-proxy" width="500" height="300">
 
