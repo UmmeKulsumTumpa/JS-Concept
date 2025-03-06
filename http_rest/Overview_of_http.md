@@ -118,5 +118,5 @@
 ### **HTTP/3**
 - **UDP + QUIC** (didn’t go deep).
 
-<img src="images/all_types_of_http.png" alt="reverse-proxy" width="500" height="300">
+<img src="images/all_types_of_http.png" alt="reverse-proxy">
 
