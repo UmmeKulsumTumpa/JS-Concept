@@ -250,3 +250,84 @@ Due to these issues, modern browsers **disable pipelining by default**. Instead,
 ## Conclusion
 
 HTTP pipelining was an attempt to speed up HTTP by sending multiple requests **without waiting** for responses. However, due to **implementation issues and head-of-line blocking**, it was **not widely adopted** and has been **superseded by HTTP/2 multiplexing**.
+
+---
+
+# Domain Sharding and Subdomains
+
+## Issue Without Domain Sharding
+
+In the early days of HTTP/1.x, websites faced a significant performance bottleneck because a browser could only open a limited number of connections to a single server. This limitation meant that if a website had several resources like images, JavaScript files, or CSS files, the browser had to load these resources sequentially over a single connection. The number of connections per domain was typically limited to 2-3, meaning that the browser could only download a small number of resources at a time. 
+
+As websites became more complex and included multiple resources, this created a delay in loading time. The process of fetching each resource one after another, as shown in the first diagram of your image, slowed down the page load time, causing inefficiencies.
+
+## Domain Sharding: Mitigating the Issue
+
+**Domain Sharding** is a technique introduced to overcome this limitation and improve website performance. The idea behind domain sharding is to split the website's resources across multiple subdomains, allowing the browser to open multiple connections to the server and load resources in parallel.
+
+### How Domain Sharding Works
+In domain sharding, instead of loading all resources from a single domain (e.g., **www.example.com**), the resources are split across multiple subdomains (e.g., **www1.example.com**, **www2.example.com**, etc.). This allows the browser to open multiple connections to each subdomain, enabling the parallel downloading of resources.
+
+For example:
+- In a **without domain sharding** setup, all resources are loaded sequentially from **www.example.com**. The browser is restricted by the number of allowed connections (typically 2-3), which means it can only download a limited number of resources at once.
+- In **with domain sharding**, the browser can now open 6 connections to each subdomain, significantly increasing the number of parallel connections. This allows multiple resources to be fetched simultaneously from different subdomains, improving the overall loading speed of the webpage.
+
+### Example Without Domain Sharding:
+
+<img src="images/without_domain_sharding.png" alt="without domain sharding" height="300" width="500">
+
+Without domain sharding, all resources (like images) are fetched sequentially using a single domain, limiting the number of parallel connections. The resources are fetched one by one, and time passes as each resource is downloaded.
+
+### Example With Domain Sharding:
+
+<img src="images/with_domain_sharding.png" alt="with domain sharding" height="300" width="500">
+
+With domain sharding, resources are split across multiple subdomains (e.g., **www1.example.com**, **www2.example.com**). The browser can now open 6 connections per domain, allowing resources to be loaded simultaneously. This increases the total number of parallel connections (from 2-3 to 12 in this case), improving the page load time.
+
+## Why Is Domain Sharding Deprecated?
+
+Although domain sharding improved performance in HTTP/1.x, it has been deprecated in favor of HTTP/2 due to its limitations and newer, more efficient methods in HTTP/2.
+
+### Connection Coalescing in HTTP/2
+HTTP/2 introduced a more efficient mechanism for handling multiple parallel requests over a single connection. In HTTP/2, resources can be downloaded in parallel without the need to split them across multiple subdomains. This reduces the need for domain sharding, as HTTP/2 can handle parallel requests much more efficiently.
+
+**Connection Coalescing**: Most HTTP/2 implementations use connection coalescing, which allows multiple domains to share a single connection. This eliminates the need for domain sharding and improves performance without the drawbacks of opening multiple connections to different subdomains.
+
+### Problems with Domain Sharding:
+1. **Denial of Service (DoS) Protection**: Using domain sharding in HTTP/1.x could trigger issues like **DoS protection** if too many connections are made to the server. This could lead to the server blocking connections or slowing down.
+2. **Extra DNS Lookups**: Domain sharding introduces extra **DNS lookups** for each subdomain, adding overhead to the process and reducing the overall performance.
+
+### Best Practice with HTTP/2:
+With HTTP/2, it’s better to rely on the protocol's native ability to handle multiple parallel requests over a single connection, which improves performance without the drawbacks of domain sharding.
+
+---
+
+## Domain and Subdomain
+
+A **domain** and **subdomain** are parts of the structure of a website's address (URL) on the internet. Here’s how they work:
+
+### 1. Domain:
+A **domain** is the main part of a website's address that identifies the website on the internet. It is used to access a specific website or resource. The domain name usually consists of two main parts:
+
+- **Second-Level Domain (SLD)**: This is the unique name you choose for your website. For example, in **google.com**, "google" is the second-level domain.
+- **Top-Level Domain (TLD)**: This is the extension or suffix of the domain. For example, in **google.com**, "com" is the top-level domain (TLD). Other common TLDs include **.org**, **.net**, and country-based TLDs like **.uk** or **.de**.
+
+**Example**: In the URL `www.example.com`, the domain is **example.com**.
+
+### 2. Subdomain:
+A **subdomain** is a part of the main domain that can be used to organize different sections or services within a website. A subdomain comes before the main domain, separated by a period (`.`). It allows you to create separate sections of a website without needing a whole new domain.
+
+**Example**:
+- `www.example.com` – "www" is the subdomain of the domain "example.com."
+- `blog.example.com` – "blog" is a subdomain of the domain "example.com."
+- `shop.example.com` – "shop" is another subdomain of the domain "example.com."
+
+### Why Use Subdomains?
+Subdomains are useful for organizing content or providing separate areas of a website. They can be used for:
+- **Different services**: For example, `mail.example.com` could be used for email services, while `store.example.com` could be used for an online store.
+- **Localization**: A website might use subdomains for different languages, such as `en.example.com` for English content and `fr.example.com` for French content.
+- **Testing or Development**: Subdomains can be used for staging or development purposes, like `dev.example.com` or `test.example.com`.
+
+### Summary:
+- **Domain**: The main address of a website, like **example.com**.
+- **Subdomain**: A section or division of the main domain, like **blog.example.com** or **shop.example.com**.
