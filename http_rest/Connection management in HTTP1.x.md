@@ -84,4 +84,169 @@ Connection management in HTTP is crucial for the performance of websites and web
 ---
 **Remember**: As technology advanced, **HTTP/2** further improved connection handling, making many of these older techniques (like domain sharding and HTTP pipelining) less necessary.
 
+---
 
+# Short-Lived Connections in HTTP
+
+## What are Short-Lived Connections?
+
+In **HTTP/1.0**, the default behavior is to use **short-lived connections**, meaning:
+
+1. **Each HTTP request opens a new TCP connection.**
+2. **Once the response is received, the connection is closed.**
+3. **For every new request, a new connection must be established.**
+
+### Why is This Inefficient?
+- **Each new connection requires a TCP handshake**, which takes extra time.
+- TCP connections **become more efficient over time**, but short-lived connections **do not allow this optimization**.
+- Opening and closing connections **repeatedly** increases **latency** and **server load**.
+
+## Example: How HTTP/1.0 Handles Requests
+When a browser requests multiple resources (HTML, images, CSS, JavaScript), each request follows this process:
+
+1. **Request:** The browser connects to the server to request `index.html`.
+2. **TCP Handshake:** A new TCP connection is established.
+3. **Response:** The server sends `index.html` and then **closes the connection**.
+4. **Next Request:** The browser connects again for `style.css`, and the cycle repeats.
+
+## Short-Lived Connections in HTTP/1.1
+- In **HTTP/1.1**, short-lived connections **are no longer the default**.
+- Instead, **persistent connections** are enabled **unless explicitly disabled** using:
+
+  ```http
+  Connection: close
+  ```
+
+- If this header is set, **HTTP/1.1 behaves like HTTP/1.0**, closing the connection after each request.
+
+## Problems with Short-Lived Connections
+- **Additional delay** due to repeated TCP handshakes.
+- **Increased server load** from handling unnecessary connections.
+- **Slower page loads** for users.
+
+## How HTTP/1.1 Solves This
+HTTP/1.1 introduced **persistent connections**, which:
+- **Reuse a single TCP connection** for multiple HTTP requests.
+- **Reduce latency** and **improve efficiency**.
+- Allow **faster page loads** with fewer connection overheads.
+
+## Conclusion
+Short-lived connections were the default in **HTTP/1.0**, but they are inefficient. **HTTP/1.1 avoids them unless explicitly requested**, improving performance by keeping connections open for multiple requests. 🚀
+
+---
+
+# Persistent Connections in HTTP
+
+## What Are Persistent Connections?
+
+**Persistent connections** (also called **keep-alive connections**) allow a single TCP connection to remain open for multiple HTTP requests, **reducing the need for repeated TCP handshakes** and improving performance.
+
+### Why Were They Introduced?
+Short-lived connections have two major problems:
+1. **Time-consuming TCP handshakes**: Establishing a new connection for every request adds significant delay.
+2. **TCP performs better with warm connections**: A connection that stays open can **adapt and optimize performance**, but short-lived connections **never get this advantage**.
+
+## How Persistent Connections Work
+- Instead of closing after each request, the **same TCP connection is reused** for multiple requests.
+- This **reduces latency** and **improves efficiency**.
+- The connection **remains open** for some time, but **does not stay open forever**.
+- **Idle connections are closed** after a timeout.
+- The **Keep-Alive** header can be used by the server to specify how long the connection should stay open:
+
+  ```http
+  Keep-Alive: timeout=10, max=100
+  ```
+
+  This means:
+  - The connection **stays open** for **10 seconds**.
+  - A **maximum of 100 requests** can be made before the connection closes.
+
+## Persistent Connections in HTTP Versions
+
+### **HTTP/1.0**
+- **Connections are not persistent by default.**
+- To enable persistence, the client must explicitly send:
+
+  ```http
+  Connection: keep-alive
+  ```
+
+### **HTTP/1.1**
+- **Persistent connections are enabled by default.**
+- The `Connection: keep-alive` header is **not needed**, but it is **often included** for backward compatibility with HTTP/1.0.
+
+## Drawbacks of Persistent Connections
+- **Consumes server resources**: Even idle connections use memory and processing power.
+- **Can be exploited in DoS (Denial of Service) attacks**: Attackers can keep many connections open to **overwhelm the server**.
+- **Under heavy load**, closing idle connections **improves performance**.
+
+## Conclusion
+**Persistent connections improve HTTP performance** by keeping TCP connections open for multiple requests, reducing latency and server load. However, they **must be managed properly** to prevent resource exhaustion and security risks.
+
+---
+
+# HTTP Pipelining
+
+## The Problem with Sequential Requests in HTTP/1.1
+
+By default, **HTTP requests are issued sequentially**, meaning:
+1. The **browser sends a request** to the server.
+2. It **waits for a response** before sending the next request.
+3. **Network latency and bandwidth limitations** can cause significant delays.
+
+This becomes inefficient when loading a webpage with multiple resources (e.g., images, CSS, JavaScript). Each request must **wait for the previous one to complete**, leading to **slower page loads**.
+
+## Introducing HTTP Pipelining
+
+**HTTP pipelining** was introduced to improve performance by:
+- **Sending multiple requests** over the same **persistent connection** **without waiting** for responses.
+- **Reducing latency** by eliminating the delay between consecutive requests.
+- **Potentially improving TCP efficiency** by packing multiple requests in the same TCP message.
+
+### How HTTP Pipelining Works
+
+1. The client sends **multiple requests in a row** without waiting for responses.
+2. The server processes them **in order** and **sends responses sequentially**.
+3. The same **persistent TCP connection** is reused, avoiding the overhead of establishing new connections.
+
+### Example of Pipelining vs. Sequential Requests
+
+#### **Without Pipelining (Sequential Requests)**:
+```
+Request 1 → Wait → Response 1
+Request 2 → Wait → Response 2
+Request 3 → Wait → Response 3
+```
+
+#### **With Pipelining**:
+```
+Request 1 → Request 2 → Request 3 → Wait
+Response 1 → Response 2 → Response 3
+```
+Since requests are sent without waiting, the server can **begin processing earlier**, improving efficiency.
+
+## Limitations of HTTP Pipelining
+
+Despite its theoretical benefits, HTTP pipelining **was never widely adopted** due to several issues:
+
+1. **Buggy Proxies Cause Erratic Behavior**  
+   - Many HTTP proxies **do not handle pipelining correctly**, leading to **unexpected issues**.
+   - This made troubleshooting **difficult for web developers**.
+
+2. **Difficult to Implement Efficiently**  
+   - **Request size, network latency, and bandwidth affect performance**.
+   - Important requests might get **stuck behind less important ones** (e.g., a large CSS file delaying a critical script).
+
+3. **Head-of-Line Blocking**  
+   - If one response is **delayed**, all subsequent responses **must wait**, **reducing efficiency**.
+
+## Why HTTP Pipelining Was Deprecated
+
+Due to these issues, modern browsers **disable pipelining by default**. Instead, HTTP/2 introduced **multiplexing**, which:
+- **Solves head-of-line blocking** by allowing **multiple requests and responses to be interleaved**.
+- **Handles prioritization better**, ensuring **important resources load first**.
+- **Eliminates the need for pipelining** by improving connection efficiency.
+
+## Conclusion
+
+HTTP pipelining was an attempt to speed up HTTP by sending multiple requests **without waiting** for responses. However, due to **implementation issues and head-of-line blocking**, it was **not widely adopted** and has been **superseded by HTTP/2 multiplexing**.
