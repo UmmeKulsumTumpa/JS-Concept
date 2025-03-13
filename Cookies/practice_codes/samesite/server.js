@@ -1,9 +1,6 @@
 const express = require("express");
-const cors = require("cors");
 
 const app = express();
-app.use(cors());
-
 
 app.post("/", (req, res) => {
     const cookie = req.headers.cookie;
@@ -17,7 +14,7 @@ app.post("/", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-    const cookie = "user=tumpa; samesite=strict;";
+    const cookie = "user=tumpa; samesite=strict; secure";
     // const cookie = "user=tumpa; samesite=lax; secure";
     // const cookie = "user=tumpa; samesite=none; secure";
     // const cookie = "user=tumpa;";
