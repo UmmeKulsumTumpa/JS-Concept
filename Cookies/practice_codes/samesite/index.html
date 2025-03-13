@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="/img">
+    <button id="button">Click to see the image</button>
+
+    <script>
+        const button = document.getElementById("button");
+        if(document.cookie){
+            button.style.display = "none";
+        }
+
+        button.addEventListener("click", e => {
+            fetch ("http://localhost:8080/login",{
+                    "method": "POST",
+                    "credentials": "include"
+                }
+            )
+            .then (a=>a.text())
+            .then (console.log)
+        })
+    </script>
+</body>
+</html>
