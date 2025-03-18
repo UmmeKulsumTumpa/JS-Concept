@@ -2,16 +2,18 @@
 
 - Cookies can be set from server and browser
 - server tells the browser to set the cookie
-<img src="images/server-set-cookie.png">
+<img src="basic-images/server-set-cookie.png">
 
 ---
 <h2> Cookie Properties </h2>
 
 - Cookies are sent with every request, so it consumes more bandwidth when we have many cookies on website
-<img src="images/cookie-sent-with-request.png">
+<img src="basic-images/cookie-sent-with-request.png">
 
 <h3> Cookie Control </h3>
+
 - so as many cookies can consume more bandwidth, so we can define cookie scope. 
+
   - Domain : Cookies are paired with domain. if i set cookie for one domain, the other domains/sub-domains(sub-domain too???) can't see the cookies. let, i set a cookie for example.com, i can't see the cookie in www.example.com.
    ``` document.cookie="tumpa=1" ```
   but no worries, we can set domain attribute with cookie to set which domain/sub-domains can access the cookie. for example if we want to give access to all sub-domains of example.com,
@@ -24,6 +26,7 @@
   ```
 
 <h2> expires and max age</h2>
+
 - if we don't specify expires and max-age, the cookie will be deleted when the browser is closed. this type of cookie is called the session cookie.
 
 ---
@@ -39,11 +42,11 @@ now, what does this same site do? it has three different parameter: lax, strict,
 document.cookie="secretcookie=1; samesite=strict"
 ```
 
-<img src="images/samesite-strict.png">
+<img src="basic-images/samesite-strict.png">
 
 only the secretcookie is set strict, other two cookies have no parameters. so other two cookies will be send with every request.
 
-<img src="images/not-sending-secretcookie.png">
+<img src="basic-images/not-sending-secretcookie.png">
 
 now, we can see the cookie only from the same site of www.example.com. but if we wanna visit www.example.com from a different site, it will not send the cookie which was set strict.
 
@@ -56,13 +59,13 @@ now, we can see the cookie only from the same site of www.example.com. but if we
 - permanent cookie: if we set max-age/expires, then the cookie will live until meets max-age/expires even if we close the browser.
 - Httponly cookie: can only be set by the server, the browser can't read this. this is for security to prevent xss attack.
 so now, we are gonna set a httponly cookie from the server
-<img src="images/set-httponly-cookie.png">
+<img src="basic-images/set-httponly-cookie.png">
 now, we can see a arrow in the httponly column
-<img src="images/arrow-in-httponly-column.png">
+<img src="basic-images/arrow-in-httponly-column.png">
 now, js(document.cookie) can't read the cookie
-<img src="images/js-cant-access-httponly-cookie.png">
+<img src="basic-images/js-cant-access-httponly-cookie.png">
 but we will still send the httponly cookie with every request we make. this is kinda we are sending the cookie, but js can't see this. this is useful when we want to pass a token.
-<img src="images/httponly-cookie-is-passed-in-request.png">
+<img src="basic-images/httponly-cookie-is-passed-in-request.png">
 
 - Secure cookie: only be sent in https protocols
 - Third Party cookie: 
@@ -71,6 +74,7 @@ but we will still send the httponly cookie with every request we make. this is k
 
 ---
 <h2> Cookie Security </h2>
+
 - Stealing Cookie
 - Cross site Request Forgery
 
