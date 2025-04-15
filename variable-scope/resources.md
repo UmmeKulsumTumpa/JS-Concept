@@ -1,0 +1,2 @@
+- [w3school scope](https://www.w3schools.com/js/js_scope.asp)
+- [best for 3 types of scope+practice](https://wesbos.com/javascript/03-the-tricky-bits/scope)
