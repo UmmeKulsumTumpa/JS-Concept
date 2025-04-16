@@ -3,4 +3,5 @@
 - copied by value
 - stored in stack
 - no properties, except auto-boxed access
-
+- primitive has autoboxing, js automatically boxes/wraps a primitive value into a object based on its corresponding wrapper class;
+- 
