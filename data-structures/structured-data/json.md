@@ -1,0 +1,3 @@
+- json follows js object syntax
+- deserialization -> converting string to a native object
+- serialization -> converting a native object to a string
