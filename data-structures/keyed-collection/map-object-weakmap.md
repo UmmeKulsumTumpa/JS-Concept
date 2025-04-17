@@ -189,3 +189,6 @@ You can’t **iterate or inspect** the contents of a WeakMap (no `.size`, `.forE
 | Key types | Any | Only objects |
 | Prevents GC | ✅ Yes | ❌ No |
 
+## Resources
+
+- [video](https://www.youtube.com/watch?v=iSt5iLwqtdI)
