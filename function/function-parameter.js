@@ -64,6 +64,22 @@ console.log(conCat(", ", "red", "green", "blue", "white", "yellow", "cyan", "ora
  }
 
 console.log(subtract(5)); // 4, because we set a default value(1) to b
+console.log(subtract(5, 2)); // 3, because we passed a value(2) to b
+console.log(subtract(5, undefined)); // 4, because we passed a value(undefined), to b so the default value (1) is applied
+console.log(subtract(5, null)); // 5, because we passed a value(null), to b so the default value (1) is not applied
+console.log(subtract(5, "")); // 5, because we passed a value(""), to b so the default value (1) is not applied
+
+
+// falsy values null/"" do not trigger the default value
+// so if we pass null or "" to the function, it will be considered as a value
+// and the default value will not be applied
+// so we can use null or "" as a value
+function test(num = 1){
+    console.log(num);
+}
+
+test(""); // ""
+test(null) // null
 
 // rest parameters (...name)
 function multiply(multiplier, ...theArgs){
