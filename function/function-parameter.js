@@ -29,3 +29,47 @@ const cubedNumbers = map(function (x){
 console.log(cubedNumbers);
 
 
+// using argument.length in cases when we don't know the total number of arguments passed to that function
+function conCat(separator){
+    let ans = "";
+
+    // iterate over arguments
+    // we start from 1, because we consider that the 1st argument is the seperator
+    for(let i=1; i<arguments.length; i++){
+        ans += arguments[i] + separator;
+    }
+
+    return ans;
+}
+
+console.log(conCat(", ", "red", "green", "blue", "white"));
+
+console.log(conCat(", ", "red", "green", "blue", "white", "yellow", "cyan", "orange", "black"));
+
+// default parameters
+// js by default set all function parameters to undefined
+// so if some value is not passed, we can not get the desired arguemnt
+// here comes the default parameter
+
+// without default
+ function add(a, b){
+    return a+b;
+ }
+
+ console.log(add(5)); // NaN, because 5+undefined 
+
+ // with default 
+ function subtract(a, b=1){
+    return a-b;
+ }
+
+console.log(subtract(5)); // 4, because we set a default value(1) to b
+
+// rest parameters (...name)
+function multiply(multiplier, ...theArgs){
+    return theArgs.map((x) => multiplier * x);
+}
+
+const arr = multiply(2, 1, 2, 3, 4);
+console.log(arr);
+
