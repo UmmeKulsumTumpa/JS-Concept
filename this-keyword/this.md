@@ -12,4 +12,9 @@
 - in non-strict mode, this always becomes an object
 
 
+- implicit binding
+- explicit binding
+- new binding
+- window binding
+
 
