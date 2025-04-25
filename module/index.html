@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module</title>
+</head>
+<body>
+    
+    <script type="module">
+        let user = "Tumpa";
+    </script>
+
+    <script type="module">
+        // alert(user) // refrenceError, because they are in different module
+        // in a module, this is undefined
+        console.log(this); // undefined
+        
+    </script>
+
+    <script>
+        console.log(this); // window
+        
+    </script>
+
+    <!-- <script src="test.js" type="module"></script> -->
+    <!-- <script src="init.js" type="module"></script>
+    <script src="another.js" type="module"></script> -->
+
+</body>
+</html>
+
